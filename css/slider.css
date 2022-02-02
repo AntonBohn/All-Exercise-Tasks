@@ -1,0 +1,37 @@
+main {
+    margin: 100px auto;
+    width: 600px;
+    aspect-ratio: 16 / 9;
+}
+
+.slider {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    --move: 1;
+}
+
+.slider > * {
+    position: absolute;
+    width: 100%;
+    object-fit: cover;
+    height: 100%;
+    transition: all 250ms ease-in-out;
+}
+
+.slider > *:not(.cur):not(.prev):not(.next) {
+    display: none;
+}
+
+
+.slider > .prev {
+    transform: translateX(calc(var(--move) * -100%));
+}
+
+.slider > .next {
+    transform: translateX(calc(var(--move) * 100%));
+}
+
+.slider > .cur {
+    transform: translateX(0);
+}
