@@ -35,3 +35,14 @@ main {
 .slider > .cur {
     transform: translateX(0);
 }
+
+/* snap next slide to its position except for there are only two slides */
+.slider.moving .next {
+    /* calculate abs */
+    --abs: max(2 - var(--item-count), var(--item-count) - 2);
+    /* 1 if abs is not zero -> not exactly two slides */
+    --not-two: min(1, var(--abs));
+    /* 1 if not-two is zero -> exactly two slides */
+    --two: calc(1 - var(--not-two));
+    transition-duration: calc(var(--duration) * var(--two))
+  }
