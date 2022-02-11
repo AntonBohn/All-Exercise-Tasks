@@ -15,12 +15,10 @@ class Slider {
     this.el = el;
     this.initSlides();
     this.direction = DIRECTIONS.fwd;
-
-    console.log(this);
   }
 
   initSlides() {
-    this.slides = Array.from(document.querySelectorAll(".slider > *"));
+    this.slides = Array.from(this.el.querySelectorAll(":scope > *"));
     this.itemCount = this.slides.length;
     this.max = this.slides.length - 1;
     this.cur = 0;
@@ -28,28 +26,152 @@ class Slider {
     this.prev = this.max;
     this.slides[this.cur].classList.add(CLASSNAMES.cur);
     this.slides[this.next].classList.add(CLASSNAMES.next);
-    this.slides[this.prev].classList.add(CLASSNAMES.prev);
+    this.max > 1 && this.slides[this.prev].classList.add(CLASSNAMES.prev);
     return this;
   }
 
   fwd() {
     if (this.moving) return;
-    this.direction = DIRECTIONS.fwd;
-    this.prepare();
-    this.cur = this.cur + 1 > this.max ? 0 : this.cur + 1;
-    this.next = this.cur === this.max ? 0 : this.cur + 1;
-    this.prev = this.cur === 0 ? this.max : this.cur - 1;
-    this.apply();
+    if (this.max === 1) {
+      this.moving = true;
+      // disable transition
+      this.transition = false;
+      requestAnimationFrame(() => {
+        this.direction = DIRECTIONS.fwd;
+        // exchange classes
+        requestAnimationFrame(() => {
+          // re-enable transition
+          this.transition = true;
+          requestAnimationFrame(() => {
+            // happens after transition ended
+            this.slides[this.cur].addEventListener(
+              "transitionend",
+              () => {
+                this.moving = false;
+                requestAnimationFrame(() => {
+                  this.slides[this.cur].classList.replace(
+                    CLASSNAMES.prev,
+                    CLASSNAMES.next
+                  );
+                  this.cur = Math.abs(this.cur - 1);
+                  this.next = Math.abs(this.next - 1);
+                });
+              },
+              { once: true }
+            );
+            // happens first
+            this.slides[this.cur].classList.replace(
+              CLASSNAMES.cur,
+              CLASSNAMES.prev
+            );
+            this.slides[this.next].classList.replace(
+              CLASSNAMES.next,
+              CLASSNAMES.cur
+            );
+          });
+        });
+      });
+    } else {
+      this.direction = DIRECTIONS.fwd;
+      this.prepare();
+      this.cur = this.cur + 1 > this.max ? 0 : this.cur + 1;
+      this.next = this.cur === this.max ? 0 : this.cur + 1;
+      this.prev = this.cur === 0 ? this.max : this.cur - 1;
+      this.apply();
+    }
   }
 
   back() {
     if (this.moving) return;
-    this.direction = DIRECTIONS.back;
-    this.prepare();
-    this.cur = this.cur - 1 < 0 ? this.max : this.cur - 1;
-    this.next = this.cur === 0 ? this.max : this.cur - 1;
-    this.prev = this.cur === this.max ? 0 : this.cur + 1;
-    this.apply();
+    if (this.max === 1) {
+      this.moving = true;
+      // disable transition
+      this.transition = false;
+      requestAnimationFrame(() => {
+        this.direction = DIRECTIONS.back;
+        // exchange classes
+        requestAnimationFrame(() => {
+          // re-enable transition
+          this.transition = true;
+          requestAnimationFrame(() => {
+            this.slides[this.cur].addEventListener(
+              "transitionend",
+              () => {
+                this.moving = false;
+                requestAnimationFrame(() => {
+                  this.slides[this.cur].classList.replace(
+                    CLASSNAMES.prev,
+                    CLASSNAMES.next
+                  );
+                  this.cur = Math.abs(this.cur - 1);
+                  this.next = Math.abs(this.next - 1);
+                });
+              },
+              { once: true }
+            );
+            this.slides[this.cur].classList.replace(
+              CLASSNAMES.cur,
+              CLASSNAMES.prev
+            );
+            this.slides[this.next].classList.replace(
+              CLASSNAMES.next,
+              CLASSNAMES.cur
+            );
+          });
+        });
+      });
+    } else {
+      this.direction = DIRECTIONS.back;
+      this.prepare();
+      this.cur = this.cur - 1 < 0 ? this.max : this.cur - 1;
+      this.next = this.cur === 0 ? this.max : this.cur - 1;
+      this.prev = this.cur === this.max ? 0 : this.cur + 1;
+      this.apply();
+    }
+  }
+
+  // this funcion dose't work because back and fwd have to be applyd to work
+  slidesIfOnlyTwoSlides() {
+    if (this.max === 1) {
+      this.moving = true;
+      // disable transition
+      this.transition = false;
+      requestAnimationFrame(() => {
+        this.direction = DIRECTIONS.back;
+        // exchange classes
+        requestAnimationFrame(() => {
+          // re-enable transition
+          this.transition = true;
+          requestAnimationFrame(() => {
+            this.slides[this.cur].addEventListener(
+              "transitionend",
+              () => {
+                this.moving = false;
+                requestAnimationFrame(() => {
+                  this.slides[this.cur].classList.replace(
+                    CLASSNAMES.prev,
+                    CLASSNAMES.next
+                  );
+                  this.cur = Math.abs(this.cur - 1);
+                  this.next = Math.abs(this.next - 1);
+                });
+              },
+              { once: true }
+            );
+            this.slides[this.cur].classList.replace(
+              CLASSNAMES.cur,
+              CLASSNAMES.prev
+            );
+            this.slides[this.next].classList.replace(
+              CLASSNAMES.next,
+              CLASSNAMES.cur
+            );
+          });
+        });
+      });
+    } else {
+      this.direction = DIRECTIONS.back;
+    }
   }
 
   prepare() {
@@ -79,6 +201,17 @@ class Slider {
     return this.el.classList.contains(CLASSNAMES.moving);
   }
 
+  set transition(t) {
+    this.el.style.setProperty(
+      "--transition-property",
+      t === true ? "" : "none"
+    );
+  }
+
+  get transition() {
+    return this.el.style.getPropertyValue("--transition-property");
+  }
+
   set direction(d) {
     this.el.style.setProperty("--move", d);
   }
@@ -103,3 +236,11 @@ document
 document
   .querySelector(".buttons button:last-child")
   .addEventListener("click", carousel.fwd.bind(carousel));
+
+const carousel2 = new Slider(document.querySelector(".slider2"));
+document
+  .querySelector(".buttons2 button:first-child")
+  .addEventListener("click", carousel2.back.bind(carousel2));
+document
+  .querySelector(".buttons2 button:last-child")
+  .addEventListener("click", carousel2.fwd.bind(carousel2));
