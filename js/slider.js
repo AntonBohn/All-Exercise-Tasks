@@ -39,37 +39,7 @@ class Slider {
       requestAnimationFrame(() => {
         this.direction = DIRECTIONS.fwd;
         // exchange classes
-        requestAnimationFrame(() => {
-          // re-enable transition
-          this.transition = true;
-          requestAnimationFrame(() => {
-            // happens after transition ended
-            this.slides[this.cur].addEventListener(
-              "transitionend",
-              () => {
-                this.moving = false;
-                requestAnimationFrame(() => {
-                  this.slides[this.cur].classList.replace(
-                    CLASSNAMES.prev,
-                    CLASSNAMES.next
-                  );
-                  this.cur = Math.abs(this.cur - 1);
-                  this.next = Math.abs(this.next - 1);
-                });
-              },
-              { once: true }
-            );
-            // happens first
-            this.slides[this.cur].classList.replace(
-              CLASSNAMES.cur,
-              CLASSNAMES.prev
-            );
-            this.slides[this.next].classList.replace(
-              CLASSNAMES.next,
-              CLASSNAMES.cur
-            );
-          });
-        });
+        this.slidesIfOnlyTwoSlides();
       });
     } else {
       this.direction = DIRECTIONS.fwd;
@@ -90,35 +60,7 @@ class Slider {
       requestAnimationFrame(() => {
         this.direction = DIRECTIONS.back;
         // exchange classes
-        requestAnimationFrame(() => {
-          // re-enable transition
-          this.transition = true;
-          requestAnimationFrame(() => {
-            this.slides[this.cur].addEventListener(
-              "transitionend",
-              () => {
-                this.moving = false;
-                requestAnimationFrame(() => {
-                  this.slides[this.cur].classList.replace(
-                    CLASSNAMES.prev,
-                    CLASSNAMES.next
-                  );
-                  this.cur = Math.abs(this.cur - 1);
-                  this.next = Math.abs(this.next - 1);
-                });
-              },
-              { once: true }
-            );
-            this.slides[this.cur].classList.replace(
-              CLASSNAMES.cur,
-              CLASSNAMES.prev
-            );
-            this.slides[this.next].classList.replace(
-              CLASSNAMES.next,
-              CLASSNAMES.cur
-            );
-          });
-        });
+        this.slidesIfOnlyTwoSlides();
       });
     } else {
       this.direction = DIRECTIONS.back;
@@ -130,48 +72,37 @@ class Slider {
     }
   }
 
-  // this funcion dose't work because back and fwd have to be applyd to work
   slidesIfOnlyTwoSlides() {
-    if (this.max === 1) {
-      this.moving = true;
-      // disable transition
-      this.transition = false;
+    // exchange classes
+    requestAnimationFrame(() => {
+      // re-enable transition
+      this.transition = true;
       requestAnimationFrame(() => {
-        this.direction = DIRECTIONS.back;
-        // exchange classes
-        requestAnimationFrame(() => {
-          // re-enable transition
-          this.transition = true;
-          requestAnimationFrame(() => {
-            this.slides[this.cur].addEventListener(
-              "transitionend",
-              () => {
-                this.moving = false;
-                requestAnimationFrame(() => {
-                  this.slides[this.cur].classList.replace(
-                    CLASSNAMES.prev,
-                    CLASSNAMES.next
-                  );
-                  this.cur = Math.abs(this.cur - 1);
-                  this.next = Math.abs(this.next - 1);
-                });
-              },
-              { once: true }
-            );
-            this.slides[this.cur].classList.replace(
-              CLASSNAMES.cur,
-              CLASSNAMES.prev
-            );
-            this.slides[this.next].classList.replace(
-              CLASSNAMES.next,
-              CLASSNAMES.cur
-            );
-          });
-        });
+        this.slides[this.cur].addEventListener(
+          "transitionend",
+          () => {
+            this.moving = false;
+            requestAnimationFrame(() => {
+              this.slides[this.cur].classList.replace(
+                CLASSNAMES.prev,
+                CLASSNAMES.next
+              );
+              this.cur = Math.abs(this.cur - 1);
+              this.next = Math.abs(this.next - 1);
+            });
+          },
+          { once: true }
+        );
+        this.slides[this.cur].classList.replace(
+          CLASSNAMES.cur,
+          CLASSNAMES.prev
+        );
+        this.slides[this.next].classList.replace(
+          CLASSNAMES.next,
+          CLASSNAMES.cur
+        );
       });
-    } else {
-      this.direction = DIRECTIONS.back;
-    }
+    });
   }
 
   prepare() {
