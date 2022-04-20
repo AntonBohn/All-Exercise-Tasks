@@ -15,6 +15,64 @@ class Slider {
     this.el = el;
     this.initSlides();
     this.direction = DIRECTIONS.fwd;
+    this.initElement().initListener().addListerner();
+  }
+
+  initElement() {
+    this.slider = this.el;
+    return this;
+  }
+
+  initListener() {
+    this.handlePointerDown = this.pointerDownHandler.bind(this);
+    this.handlePointerMove = this.pointerMoveHandler.bind(this);
+    this.handlePointerUp = this.pointerUpHandler.bind(this);
+    return this;
+  }
+
+  addListerner() {
+    this.slider.addEventListener("pointerdown", this.handlePointerDown);
+    document.addEventListener("pointermove", this.handlePointerMove);
+    document.addEventListener("pointerup", this.handlePointerUp);
+    document.addEventListener("pointerleave", this.handlePointerUp);
+    return this;
+  }
+
+  pointerDownHandler(e) {
+    e.preventDefault();
+    this.start = {
+      x: e.pageX
+    }
+    this.transitionDuration = 0;
+    return this;
+  }
+
+  pointerMoveHandler(e) {
+    if(this.start) {
+      const deltaX =  e.pageX - this.start.x;
+      this.slides[this.cur].style.transform =  `translateX(${deltaX}px)`;
+      this.slides[this.next].style.transform =  `translateX(calc(100% + ${deltaX}px))`;
+      this.slides[this.max].style.transform =  `translateX(calc(${deltaX}px - 100%))`;
+    }
+    return this;
+  }
+
+  pointerUpHandler(e) {
+    if(this.start) {
+      this.transitionDuration = false;
+      const deltaX =  e.pageX - this.start.x;
+      this.slides[this.cur].style.transform = "";
+      this.slides[this.next].style.transform = "";
+      this.slides[this.max].style.transform = "";
+      delete this.start;
+      if(deltaX < 0) {
+        this.fwd();
+      }
+      else {
+        this.back();
+      }
+    }
+    return this;
   }
 
   initSlides() {
@@ -133,6 +191,13 @@ class Slider {
 
   get transition() {
     return this.el.style.getPropertyValue("--transition-property");
+  }
+
+  set transitionDuration(dur) {
+    this.el.style.setProperty(
+      "--transition-duration",
+      "boolean" === typeof dur ? "" : `${dur}ms`
+    );
   }
 
   set direction(d) {
