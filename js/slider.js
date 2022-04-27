@@ -50,9 +50,22 @@ class Slider {
   pointerMoveHandler(e) {
     if(this.start) {
       const deltaX =  e.pageX - this.start.x;
+      
+      this.direction = deltaX < 0 ? DIRECTIONS.fwd : DIRECTIONS.back;
+      this.slides[this.prev].classList.remove(CLASSNAMES.prev);
+      this.slides[this.next].classList.remove(CLASSNAMES.next);
+      this.setNeighbours();
+      this.slides[this.prev].classList.add(CLASSNAMES.prev);
+      this.slides[this.next].classList.add(CLASSNAMES.next);
+
       this.slides[this.cur].style.transform =  `translateX(${deltaX}px)`;
-      this.slides[this.next].style.transform =  `translateX(calc(100% + ${deltaX}px))`;
-      this.slides[this.max].style.transform =  `translateX(calc(${deltaX}px - 100%))`;
+      if (deltaX < 0) {
+        this.slides[this.next].style.transform =  `translateX(calc(${deltaX}px + 100%))`;
+        this.slides[this.prev].style.transform =  `translateX(calc(${deltaX}px - 100%))`;
+      } else {
+        this.slides[this.next].style.transform =  `translateX(calc(${deltaX}px - 100%))`;
+        this.slides[this.prev].style.transform =  `translateX(calc(${deltaX}px + 100%))`;
+      }
     }
     return this;
   }
@@ -63,7 +76,7 @@ class Slider {
       const deltaX =  e.pageX - this.start.x;
       this.slides[this.cur].style.transform = "";
       this.slides[this.next].style.transform = "";
-      this.slides[this.max].style.transform = "";
+      this.slides[this.prev].style.transform = "";
       delete this.start;
       if(deltaX < 0) {
         this.fwd();
@@ -96,8 +109,7 @@ class Slider {
       this.direction = DIRECTIONS.fwd;
       this.prepare();
       this.cur = this.cur + 1 > this.max ? 0 : this.cur + 1;
-      this.next = this.cur === this.max ? 0 : this.cur + 1;
-      this.prev = this.cur === 0 ? this.max : this.cur - 1;
+      this.setNeighbours();
       this.apply();
     }
   }
@@ -110,9 +122,18 @@ class Slider {
       this.direction = DIRECTIONS.back;
       this.prepare();
       this.cur = this.cur - 1 < 0 ? this.max : this.cur - 1;
+      this.setNeighbours();
+      this.apply();
+    }
+  }
+
+  setNeighbours() {
+    if (this.direction === DIRECTIONS.fwd) {
+      this.next = this.cur === this.max ? 0 : this.cur + 1;
+      this.prev = this.cur === 0 ? this.max : this.cur - 1;
+    } else {
       this.next = this.cur === 0 ? this.max : this.cur - 1;
       this.prev = this.cur === this.max ? 0 : this.cur + 1;
-      this.apply();
     }
   }
 
@@ -201,11 +222,11 @@ class Slider {
   }
 
   set direction(d) {
-    this.el.style.setProperty("--move", d);
+    this.el.style.setProperty("--move", d.toString());
   }
 
   get direction() {
-    return this.el.style.getPropertyValue("--move");
+    return parseInt(this.el.style.getPropertyValue("--move"));
   }
 
   set itemCount(i) {
