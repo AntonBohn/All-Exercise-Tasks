@@ -38,56 +38,6 @@ class Slider {
     return this;
   }
 
-  pointerDownHandler(e) {
-    e.preventDefault();
-    this.start = {
-      x: e.pageX
-    }
-    this.transitionDuration = 0;
-    return this;
-  }
-
-  pointerMoveHandler(e) {
-    if(this.start) {
-      const deltaX =  e.pageX - this.start.x;
-      
-      this.direction = deltaX < 0 ? DIRECTIONS.fwd : DIRECTIONS.back;
-      this.slides[this.prev].classList.remove(CLASSNAMES.prev);
-      this.slides[this.next].classList.remove(CLASSNAMES.next);
-      this.setNeighbours();
-      this.slides[this.prev].classList.add(CLASSNAMES.prev);
-      this.slides[this.next].classList.add(CLASSNAMES.next);
-
-      this.slides[this.cur].style.transform =  `translateX(${deltaX}px)`;
-      if (deltaX < 0) {
-        this.slides[this.next].style.transform =  `translateX(calc(${deltaX}px + 100%))`;
-        this.slides[this.prev].style.transform =  `translateX(calc(${deltaX}px - 100%))`;
-      } else {
-        this.slides[this.next].style.transform =  `translateX(calc(${deltaX}px - 100%))`;
-        this.slides[this.prev].style.transform =  `translateX(calc(${deltaX}px + 100%))`;
-      }
-    }
-    return this;
-  }
-
-  pointerUpHandler(e) {
-    if(this.start) {
-      this.transitionDuration = false;
-      const deltaX =  e.pageX - this.start.x;
-      this.slides[this.cur].style.transform = "";
-      this.slides[this.next].style.transform = "";
-      this.slides[this.prev].style.transform = "";
-      delete this.start;
-      if(deltaX < 0) {
-        this.fwd();
-      }
-      else {
-        this.back();
-      }
-    }
-    return this;
-  }
-
   initSlides() {
     this.slides = Array.from(this.el.querySelectorAll(":scope > *"));
     this.itemCount = this.slides.length;
@@ -99,42 +49,6 @@ class Slider {
     this.slides[this.next].classList.add(CLASSNAMES.next);
     this.max > 1 && this.slides[this.prev].classList.add(CLASSNAMES.prev);
     return this;
-  }
-
-  fwd() {
-    if (this.moving) return;
-    if (this.max === 1) {
-        this.slidesIfOnlyTwoSlides(DIRECTIONS.fwd);
-    } else {
-      this.direction = DIRECTIONS.fwd;
-      this.prepare();
-      this.cur = this.cur + 1 > this.max ? 0 : this.cur + 1;
-      this.setNeighbours();
-      this.apply();
-    }
-  }
-
-  back() {
-    if (this.moving) return;
-    if (this.max === 1) {
-      this.slidesIfOnlyTwoSlides(DIRECTIONS.back);
-    } else {
-      this.direction = DIRECTIONS.back;
-      this.prepare();
-      this.cur = this.cur - 1 < 0 ? this.max : this.cur - 1;
-      this.setNeighbours();
-      this.apply();
-    }
-  }
-
-  setNeighbours() {
-    if (this.direction === DIRECTIONS.fwd) {
-      this.next = this.cur === this.max ? 0 : this.cur + 1;
-      this.prev = this.cur === 0 ? this.max : this.cur - 1;
-    } else {
-      this.next = this.cur === 0 ? this.max : this.cur - 1;
-      this.prev = this.cur === this.max ? 0 : this.cur + 1;
-    }
   }
 
   slidesIfOnlyTwoSlides(direction) {
@@ -151,18 +65,23 @@ class Slider {
           this.slides[this.cur].addEventListener(
             "transitionend",
             () => {
-              this.moving = false;
               requestAnimationFrame(() => {
+                this.transition = false;
                 this.slides[this.cur].classList.replace(
                   CLASSNAMES.prev,
                   CLASSNAMES.next
                 );
                 this.cur = Math.abs(this.cur - 1);
                 this.next = Math.abs(this.next - 1);
+                requestAnimationFrame(() => {
+                  this.transition = true;
+                  this.moving = false;
+                });
               });
             },
             { once: true }
           );
+          this.resetTransform();
           this.slides[this.cur].classList.replace(
             CLASSNAMES.cur,
             CLASSNAMES.prev
@@ -174,6 +93,138 @@ class Slider {
         });
       });
     });
+  }
+
+  pointerDownHandler(e) {
+    e.preventDefault();
+    if (this.moving) return;
+    this.start = {
+      x: e.pageX,
+    };
+    this.transitionDuration = 0;
+    return this;
+  }
+
+  pointerMoveHandler(e) {
+    if (this.start) {
+      const deltaX = e.pageX - this.start.x;
+
+      this.direction = deltaX < 0 ? DIRECTIONS.fwd : DIRECTIONS.back;
+      this.slides[this.prev].classList.remove(CLASSNAMES.prev);
+      this.slides[this.next].classList.remove(CLASSNAMES.next);
+      this.setNeighbours();
+      this.slides[this.next].classList.add(CLASSNAMES.next);
+      if (this.max > 1) {
+        this.slides[this.prev].classList.add(CLASSNAMES.prev);
+      }
+
+      this.slides[this.cur].style.transform = `translateX(${deltaX}px)`;
+      if (this.direction === DIRECTIONS.fwd) {
+        this.slides[
+          this.next
+        ].style.transform = `translateX(calc(${deltaX}px + 100%))`;
+        if (this.max > 1) {
+          this.slides[
+            this.prev
+          ].style.transform = `translateX(calc(${deltaX}px - 100%))`;
+        }
+      } else {
+        this.slides[
+          this.next
+        ].style.transform = `translateX(calc(${deltaX}px - 100%))`;
+        if (this.max > 1) {
+          this.slides[
+            this.prev
+          ].style.transform = `translateX(calc(${deltaX}px + 100%))`;
+        }
+      }
+    }
+    return this;
+    this.apply();
+  }
+
+  pointerUpHandler(e) {
+    if (this.start) {
+      this.transitionDuration = false;
+      const deltaX = e.pageX - this.start.x;
+      delete this.start;
+      if (deltaX < 0) {
+        this.fwd();
+      } else {
+        this.back();
+      }
+    }
+    return this;
+  }
+
+  fwd() {
+    if (this.moving) return;
+    if (this.max === 1) {
+      this.slidesIfOnlyTwoSlides(DIRECTIONS.fwd);
+    } else {
+      this.resetTransform();
+      this.direction = DIRECTIONS.fwd;
+      this.prepare();
+      this.cur = this.cur + 1 > this.max ? 0 : this.cur + 1;
+      this.setNeighbours();
+      this.apply();
+    }
+  }
+
+  back() {
+    if (this.moving) return;
+    if (this.max === 1) {
+      this.slidesIfOnlyTwoSlides(DIRECTIONS.back);
+    } else {
+      this.resetTransform();
+      this.direction = DIRECTIONS.back;
+      this.prepare();
+      this.cur = this.cur - 1 < 0 ? this.max : this.cur - 1;
+      this.setNeighbours();
+      this.apply();
+    }
+  }
+
+  jumpTo(idx) {
+    if (idx < 0 || idx > this.max || idx == this.cur) return;
+    this.transition = false;
+    this.resetTransform();
+    this.direction = idx > this.cur ? DIRECTIONS.fwd : DIRECTIONS.back;
+    this.prepare();
+    this.slides[idx].classList.add(CLASSNAMES.next);
+    this.slides[this.cur].classList.add(CLASSNAMES.cur);
+    requestAnimationFrame(() => {
+      const prev = this.cur;
+      this.cur = idx;
+      requestAnimationFrame(() => {
+        this.slides[this.cur].addEventListener("transitionend", () => {
+          this.slides[this.prev].classList.remove(CLASSNAMES.prev);
+          this.slides[this.next].classList.remove(CLASSNAMES.next);
+          this.setNeighbours();
+          this.slides[this.prev].classList.add(CLASSNAMES.prev);
+          this.slides[this.next].classList.add(CLASSNAMES.next);
+        });
+        this.setNeighbours();
+        this.prev = prev;
+        if (this.next === this.prev) {
+          this.next = idx === this.max ? this.max - 1 : 1;
+        }
+        this.slides[idx].classList.remove(CLASSNAMES.next);
+        this.slides[prev].classList.remove(CLASSNAMES.cur);
+        this.transition = true;
+        this.apply();
+      });
+    });
+  }
+
+  setNeighbours() {
+    if (this.direction === DIRECTIONS.fwd) {
+      this.next = this.cur === this.max ? 0 : this.cur + 1;
+      this.prev = this.cur === 0 ? this.max : this.cur - 1;
+    } else {
+      this.next = this.cur === 0 ? this.max : this.cur - 1;
+      this.prev = this.cur === this.max ? 0 : this.cur + 1;
+    }
   }
 
   prepare() {
@@ -193,6 +244,12 @@ class Slider {
     this.slides[this.prev].classList.add(CLASSNAMES.prev);
     this.slides[this.next].classList.add(CLASSNAMES.next);
     return this;
+  }
+
+  resetTransform() {
+    this.slides[this.cur].style.transform = "";
+    this.slides[this.next].style.transform = "";
+    this.slides[this.prev].style.transform = "";
   }
 
   set moving(m) {
@@ -238,18 +295,44 @@ class Slider {
   }
 }
 
-const carousel = new Slider(document.querySelector(".slider"));
-document
-  .querySelector(".buttons button:first-child")
-  .addEventListener("click", carousel.back.bind(carousel));
-document
-  .querySelector(".buttons button:last-child")
-  .addEventListener("click", carousel.fwd.bind(carousel));
+class Thumbnails {
+  constructor(carousel, selectorThumbnails, selectorBack, selectorFwd) {
+    this.carousel = carousel;
+    this.selectorThumbnails = selectorThumbnails;
+    this.selectorBack = selectorBack;
+    this.selectorFwd = selectorFwd;
+    this.initElement().addListener();
+  }
 
-const carousel2 = new Slider(document.querySelector(".slider2"));
-document
-  .querySelector(".buttons2 button:first-child")
-  .addEventListener("click", carousel2.back.bind(carousel2));
-document
-  .querySelector(".buttons2 button:last-child")
-  .addEventListener("click", carousel2.fwd.bind(carousel2));
+  initElement() {
+    this.thumbnails = [...document.querySelectorAll(this.selectorThumbnails)];
+    this.buttonback = document.querySelector(this.selectorBack);
+    this.buttonfwd = document.querySelector(this.selectorFwd);
+    return this;
+  }
+
+  addListener() {
+    this.thumbnails.forEach((curEl, idx) => {
+      curEl.addEventListener("click", () => this.carousel.jumpTo(idx));
+    });
+    this.buttonback.addEventListener("click", carousel.back.bind(carousel));
+    this.buttonfwd.addEventListener("click", carousel.fwd.bind(carousel));
+    return this;
+  }
+}
+
+const carousel = new Slider(document.querySelector(".slider"));
+
+const thumbnails = new Thumbnails(
+  carousel,
+  ".thumbnails > img",
+  ".buttons button:first-child",
+  ".buttons button:last-child"
+);
+// const carousel2 = new Slider(document.querySelector(".slider2"));
+// document
+//   .querySelector(".buttons2 button:first-child")
+//   .addEventListener("click", carousel2.back.bind(carousel2));
+// document
+//   .querySelector(".buttons2 button:last-child")
+//   .addEventListener("click", carousel2.fwd.bind(carousel2));
