@@ -32,7 +32,7 @@ class Slider {
 
   addListerner() {
     this.slider.addEventListener("pointerdown", this.handlePointerDown);
-    document.addEventListener("pointermove", this.handlePointerMove);
+    this.slider.addEventListener("pointermove", this.handlePointerMove);
     document.addEventListener("pointerup", this.handlePointerUp);
     document.addEventListener("pointerleave", this.handlePointerUp);
     return this;
