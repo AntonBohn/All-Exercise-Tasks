@@ -1,0 +1,6 @@
+.code-breaker {
+    font-size: 42pt;
+    color: black;
+    text-shadow: grey 0.05em 0.05em 0.1em;
+    cursor: pointer;
+}
