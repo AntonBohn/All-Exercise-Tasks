@@ -1,0 +1,787 @@
+void karelsFirstProgram() {
+    moveForward();
+    pickBeeper();
+    moveForward();
+    turnLeft();
+    moveForward();
+    turnRight();
+    moveForward();
+    dropBeeper();
+    moveForward();
+}
+##################
+void obtainArtifact() {
+    obtain();
+    return();
+}
+
+void obtain() {
+    turnRight();
+    moveForward();
+    turnLeft();
+    moveForward();
+    moveForward();
+    moveForward();
+    turnLeft();
+    moveForward();
+    pickBeeper();
+}
+
+void return() {
+    moveForward();
+    turnLeft();
+    moveForward();
+    moveForward();
+    moveForward();
+    turnLeft();
+    moveForward();
+    dropBeeper();
+}
+##################
+void defuseOneBomb() {
+    forward();
+    pickBeeper();
+    turnAround();
+    forward();
+    turnAround();
+}
+
+void forward() {
+    while(frontIsClear()) {
+        moveForward();
+    }
+}
+##################
+void defuseTwoBombs() {
+    bomb();
+    turnRight();
+    bomb();
+    turnAround();
+}
+
+
+void bomb() {
+    forward();
+    pickBeeper();
+    turnAround();
+    forward();
+}
+
+void forward() {
+    while(frontIsClear()) {
+        moveForward();
+    }
+}
+##################
+void practiceHomeRun() {
+    homeRun();
+    turnLeft();
+    homeRun();
+    turnLeft();
+    homeRun();
+    turnLeft();
+    homeRun();
+    turnLeft();
+}
+
+
+void homeRun() {
+    pickBeeper();
+    while(frontIsClear()) {
+        moveForward();
+    }
+}
+##################
+void climbTheStairs() {
+    moveForward();
+    repeat(6) {
+        turnLeft();
+        moveForward();
+        turnRight();
+        moveForward();
+    }
+}
+##################
+void fillTheHoles() {
+    fillHoles();
+}
+
+void fillHoles() {
+    repeat(4) {
+        moveForward();
+        turnRight();
+        moveForward();
+        dropBeeper();
+        turnAround();
+        moveForward();
+        turnRight();
+        moveForward();
+    }
+}
+##################
+void saveTheFlower() {
+    moveForward();
+    pickBeeper();
+    turnLeft();
+    while(! rightIsClear()) {
+        moveForward();
+        if(rightIsClear()) {
+            turnRight();
+            moveForward();
+            turnLeft();
+        }
+    }
+    dropBeeper();
+    turnRight();
+    moveForward();
+    turnRight();
+    moveForward();
+    repeat(3) {
+        while(frontIsClear()) {
+            moveForward();
+        }
+        turnLeft();
+        moveForward();
+        turnRight();
+    }
+    moveForward();
+    moveForward();
+    turnLeft();
+}
+##################
+void mowTheLawn() {
+    mowLawn();
+    moveForward();
+    turnLeft();
+    moveForward();
+    turnLeft();
+    takeBeeper();
+    moveForward();
+}
+void takeBeeper() {
+    while(beeperAhead()) {
+        moveForward();
+        pickBeeper();
+    }
+}
+
+void mowLawn() {
+    repeat(2) {
+        takeBeeper();
+        moveForward();
+        turnLeft();
+        moveForward();
+        turnLeft();
+        takeBeeper();
+        moveForward();
+        turnRight();
+        moveForward();
+        turnRight();
+        takeBeeper();
+    }
+}
+##################
+void harvestTheField(){
+    repeat(2){
+        repeat(3) {
+            pickBeeper();
+            turnRight();
+            moveForward();
+            turnLeft();
+            moveForward();
+        }
+        pickBeeper();
+        moveForward();
+        turnLeft();
+        moveForward();
+        pickBeeper();
+        moveForward();
+        turnLeft();
+        repeat(3){
+            moveForward();
+            void climbTheStairs() {
+                moveForward();
+                repeat(6) {
+                    turnLeft();
+                    moveForward();
+                    turnRight();
+                    moveForward();
+                }
+            }
+            moveForward();
+            turnLeft();
+        }
+        turnAround();
+        moveForward();
+    }
+    turnAround();
+}
+##################
+void repairTheStreet() {
+    while(!rightIsClear()) {
+        moveForward();
+        if(rightIsClear()) {
+            turnRight();
+            moveForward();
+            dropBeeper();
+            turnAround();
+            moveForward();
+            turnRight();
+            moveForward();
+        }
+    }
+    turnRight();
+    moveForward();
+    dropBeeper();
+    turnAround();
+    moveForward();
+    turnRight();
+    moveForward();
+}
+##################
+void cleanTheRoom(){
+    repeat(5){
+        while(frontIsClear()){
+            if(onBeeper()){
+                pickBeeper();
+            }
+            moveForward();
+        }
+        turnLeft();
+        if(onBeeper()){
+            pickBeeper();
+        }
+        if(frontIsClear()){
+            moveForward();
+            turnLeft();
+        }
+        while(frontIsClear()){
+            if(onBeeper()){
+                pickBeeper();
+            }
+            moveForward();
+        }
+        if(onBeeper()){
+            pickBeeper();
+        }
+        turnRight();
+        if(frontIsClear()){
+            moveForward();
+            turnRight();
+        }
+    }
+}
+##################
+void tileTheFloor() {
+    dropBeeper();
+    while(frontIsClear()) {
+        moveForward();
+        dropBeeper();
+        if(!frontIsClear()) {
+            turnLeft();
+        }
+        if(beeperAhead()) {
+            turnLeft();
+        }
+    }
+}
+##################
+void stealOlympicFire() {
+    moveForward();
+    repeat(6) {
+        turnLeft();
+        moveForward();
+        turnRight();
+        moveForward();
+    }
+    pickBeeper();
+    moveForward();
+    turnRight();
+    moveForward();
+    while(!rightIsClear() && frontIsClear()) {
+        moveForward();
+        if(!frontIsClear()) {
+            turnLeft();
+            moveForward();
+        }
+    }
+}
+##################
+
+void removeTheTiles() {
+    while(onBeeper()) {
+        pickBeeper();
+        moveForward();
+        if(!frontIsClear()) {
+            turnLeft();
+        }
+        if(!beeperAhead()) {
+            turnLeft();
+        }
+    }
+}
+##################
+void walkTheLabyrinth() {
+    turnRight();
+    while(!onBeeper()) {
+        if(frontIsClear()){
+            moveForward();
+        }
+        else if(leftIsClear()) {
+            turnLeft();
+            moveForward();
+        }
+        else if(rightIsClear()) {
+            turnRight();
+            moveForward();
+        }
+        else
+        {
+            turnAround();
+            moveForward();
+        }
+    }
+}
+##################
+void hangTheLampions() {
+    while(onBeeper()) {
+        pickBeeper();
+        turnLeft();
+        forward();
+        dropBeeper();
+        turnAround();
+        forward();
+        turnLeft();
+        moveForward();
+    }
+}
+
+void forward() {
+    while(frontIsClear()) {
+        moveForward();
+    }
+}
+##################
+void followTheSeeds() {
+    while(beeperAhead()) {
+        moveForward();
+        pickBeeper();
+        if(!beeperAhead()) {
+            turnLeft();
+        }
+    }
+}
+##################
+
+void cleanTheTunnels() {
+    while(frontIsClear()){
+        cleanTunnel();
+    }
+    cleanTunnel();
+}
+
+void cleanTunnel() {
+    turnLeft();
+    while(beeperAhead()) {
+        if(onBeeper()) {
+            pickBeeper();
+        }
+        moveForward();
+    }
+    if(onBeeper()) {
+        pickBeeper();
+    }
+    turnAround();
+    while(frontIsClear()) {
+        moveForward();
+    }
+    turnLeft();
+    if(frontIsClear()) {
+        moveForward();
+    }
+}
+##################
+
+void increment(){
+    dropBeeper();
+}
+##################void removeTheTiles() {
+    while(onBeeper()) {
+        pickBeeper();
+        moveForward();
+        if(!frontIsClear()) {
+            turnLeft();
+        }
+        if(!beeperAhead()) {
+            turnLeft();
+        }
+    }
+}
+void decrement() {
+    pickBeeper();
+}
+##################
+
+##################
+void saveTheFlowers() {
+    turnLeft();
+    while(!rightIsClear()) {
+        moveForward();
+        if(rightIsClear()) {
+            turnRight();
+            moveForward();
+            turnLeft();
+            if(onBeeper()) {
+                pickBeeper();
+            }
+        }
+    }
+    turnRight();
+    dropBeeper();
+    moveForward();
+    turnRight();
+    moveForward();
+    placeBeeper();
+    turnL();
+    placeBeeper();
+    turnL();
+    down();
+    placeBeeper();
+    turnL();
+    down();
+    turnLeft();
+}
+
+
+void down() {
+    while(frontIsClear()) {
+        moveForward();
+    }
+}
+
+void placeBeeper() {
+    if(!frontIsClear()) {
+        dropBeeper();
+    }
+}
+
+void turnL() {
+    if(leftIsClear())
+    {
+        turnLeft();
+        moveForward();
+        turnRight();
+        moveForward();
+    }
+}
+##################
+void findTeddyBear() {
+    while(!onBeeper()) {
+        moveForward();
+        if(!frontIsClear()) {
+            turnLeft();
+        }
+        if(!leftIsClear()) void removeTheTiles() {
+            while(onBeeper()) {
+                pickBeeper();
+                moveForward();
+                if(!frontIsClear()) {
+                    turnLeft();
+                }
+                if(!beeperAhead()) {
+                    turnLeft();
+                }
+            }
+        }{
+            turnRight();
+        }
+    }
+}
+##################
+void jumpTheHurdles() {
+    turnLeft();
+    while(!onBeeper() && !rightIsClear()) {
+        moveForward();
+        if(rightIsClear()) {
+            turnRight();
+            moveForward();
+            turnRight();void removeTheTiles() {
+                while(onBeeper()) {
+                    pickBeeper();
+                    moveForward();
+                    if(!frontIsClear()) {
+                        turnLeft();
+                    }
+                    if(!beeperAhead()) {
+                        turnLeft();
+                    }
+                }
+            }
+        if(onBeeper()) {
+            turnLeft();
+        }
+        if(!frontIsClear()) {
+            turnAround();
+        }
+    }
+}
+##################
+void solveTheMaze() {
+    turnRight();
+    while(!onBeeper()) {
+        if(frontIsClear()){
+            moveForward();
+        }
+        else if(rightIsClear()) {
+            turnRight();
+            moveForward();
+        }
+        else
+        {
+            turnAround();
+            moveForward();
+        }
+    }
+}
+##################
+void quantizeBits() {
+    while(frontIsClear()) {
+        quantizeCollumn();
+        moveForward();
+    }
+    quantizeCollumn();
+}
+
+void quantizeCollumn() {
+    turnLeft();
+    repeat(5) {
+        moveForward();
+    }
+    if(onBeeper()) {
+        while(frontIsClear()) {
+            moveForward();
+            if(!onBeeper()) {
+                dropBeeper();
+            }
+        }
+        turnAround();
+        while(frontIsClear()) {
+            moveForward();
+        }
+        turnLeft();
+    }
+    else{
+        turnAround();
+        while(frontIsClear()) {
+            moveForward();
+            if(onBeeper()) {
+                pickBeeper();
+            }
+        }
+        turnLeft();
+    }
+}
+##################
+void partyAgain(){
+    repeat(10){
+        turnLeft();
+        pickBeeper();
+        if(frontIsClear()){
+            moveForward();
+        }
+        else if(!frontIsClear()){
+            dropBeeper();
+            turnAround();void removeTheTiles() {
+                while(onBeeper()) {
+                    pickBeeper();
+                    moveForward();
+                    if(!frontIsClear()) {
+                        turnLeft();
+                    }
+                    if(!beeperAhead()) {
+                        turnLeft();
+                    }
+                }
+            }
+        }
+        moveParty();
+        turnLeft();
+        if(frontIsClear()){
+            moveForward();
+        }
+    }
+}
+
+void moveParty(){
+    if(frontIsClear()){
+        moveForward();
+        moveParty();
+    }
+    else if(!frontIsClear()){
+        dropBeeper();
+        turnAround();
+    }
+    moveForward();
+}
+##################
+void fetchTheStars(){
+    repeat(10){
+        turnLeft();
+        if(frontIsClear()){
+            moveForward();
+        }
+        else if(!frontIsClear()){
+            pickBeeper();
+            turnAround();
+        }
+        fetchStars();
+        turnLeft();
+        dropBeeper();
+        if(frontIsClear()){
+            moveForward();
+        }
+    }
+}
+
+void fetchStars(){
+    if(frontIsClear()){
+        moveForward();
+        fetchStars();
+    }
+    else if(!frontIsClear()){
+        pickBeeper();
+        turnAround();
+    }
+    moveForward();
+}
+##################
+void secureTheCave(){
+    repeat(10){
+        turnLeft();
+        if(frontIsClear()){
+            while(!beeperAhead()){
+                moveForward();
+            }
+            moveForward();
+            pickBeeper();void removeTheTiles() {
+                while(onBeeper()) {
+                    pickBeeper();
+                    moveForward();
+                    if(!frontIsClear()) {
+                        turnLeft();
+                    }
+                    if(!beeperAhead()) {
+                        turnLeft();
+                    }
+                }
+            }
+        }
+        else{
+            turnAround();        
+            while(frontIsClear()){
+                moveForward();
+            }
+            turnAround();
+        }
+        secure();
+        turnAround();
+        while(frontIsClear()){
+            moveForward();
+        }
+        turnLeft();
+        if(frontIsClear()){
+            moveForward();
+        }
+    }
+}
+
+void secure(){
+    if(frontIsClear()){
+        while(!beeperAhead()){
+            moveForward();
+        }
+        moveForward();
+        pickBeeper();
+        secure();
+    }
+    else{
+        turnAround();        
+        while(frontIsClear()){
+            moveForward();
+        }
+        turnAround();
+    }
+    dropBeeper();
+    moveForward();
+}
+##################
+<!-- Funktioniert noch nicht -->
+void layAndRemoveTiles(){
+    straight();
+    pickBeeper();
+}
+
+void straight(){
+    dropBeeper();
+    moveForward();
+    if(frontIsClear() && !beeperAhead()){
+        straight();
+    }
+    else{
+        corner();
+        turnRight();
+    }
+    pickBeeper();
+    moveForward();
+}
+
+void corner(){
+    turnLeft();
+    if(!beeperAhead()){
+        straight();
+    }
+    else{
+        dropBeeper();
+        moveForward();
+        turnRight();
+    }
+}
+##################
+<!-- Lösung aus dem Internet noch mal angucken -->
+void layAndRemoveTiles() {
+    if (onBeeper()) {
+        turnAround();
+    } else {
+        dropBeeper();
+        if (frontIsClear() && !beeperAhead()) {
+            moveForward();
+            layAndRemoveTiles();
+            moveForward();
+            pickBeeper();
+        } else {
+            turnLeft();
+            moveForward();
+            layAndRemoveTiles();
+            moveForward();
+            turnRight();
+            pickBeeper();
+        }
+    }
+}
+##################
+void findShelters() {
+    repeat (4) {
+        if (frontIsClear() && !beeperAhead()) {
+            moveForward();
+            if (leftIsClear() || frontIsClear() || rightIsClear()) {
+                dropBeeper();
+                findShelters();
+            }
+            turnAround();
+            moveForward();
+            turnAround();
+        }
+        turnLeft();
+    }
+}
+
