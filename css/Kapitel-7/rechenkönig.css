@@ -1,0 +1,39 @@
+body {
+    background: silver;
+}
+
+.anzeige {
+    font-size: 30px;
+    text-align: center;
+    background: #c2cfe4;
+    width: 500px;
+    height: 150px;
+    border: 20px solid #264b87;
+    border-radius: 15px;
+    margin: 30px auto;
+    box-shadow: inset 20px 10px 15px grey;
+}
+
+.zentriert {
+    margin: 0px auto;
+    text-align: center;
+}
+
+.ergebnisse {
+    font-size: 100px;
+    background: white;
+    height: 120px;
+    width: 400px;
+    padding: 20px;
+    box-shadow: 15px 15px 15px grey;
+}
+
+.info-text {
+    font-size: 20px;
+    border: 5px solid #264b87;
+    border-radius: 15px;
+    margin: 30px auto;
+    width: 500px;
+    text-align: center;
+    box-shadow: 20px 10px 15px grey;
+}
