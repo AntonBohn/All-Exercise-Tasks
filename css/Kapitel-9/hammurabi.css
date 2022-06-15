@@ -1,0 +1,18 @@
+body {
+  background: #966f33;
+}
+
+.monitor {
+  width: 680px;
+  height: 400px;
+  background: #222222;
+  padding: 25px;
+  border-radius: 15px;
+  margin: 30px auto;
+  box-shadow: inset -1px 2px 10px 5px gray;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: monospace, Courier;
+  color: #13df13;
+  text-shadow: 2px 2px 2px #13cd13;
+}
