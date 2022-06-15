@@ -4,7 +4,7 @@ var buerger = 100;
 var land = 400;
 var ende = false;
 var landPreis = 5;
-var ernteProAcker;
+var ernteProAcker = 0;
 
 function spieleEineRunde() {
   if (ende == false) {
@@ -73,7 +73,7 @@ function aussaat(saat) {
     saat = korn;
   }
   korn = korn - saat;
-  var moeglicheSaat = parseInt(saat / 2);
+  var moeglicheSaat = saat / 2;
   if (moeglicheSaat > buerger * 10) {
     moeglicheSaat = buerger * 10;
   }
@@ -85,8 +85,9 @@ function aussaat(saat) {
 }
 
 function handel(kauf) {
+  var verkauf = 0;
   if (kauf < 0) {
-    var verkauf = Math.abs(kauf);
+    verkauf = Math.abs(kauf);
   }
   if (verkauf > land) {
     alert("Nicht genug Land!");
