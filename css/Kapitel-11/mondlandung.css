@@ -1,0 +1,20 @@
+body {
+  background: white;
+  font-family: monospace;
+  font-weight: bold;
+  color: black;
+  text-shadow: 2px 2px 2px #a1c4d4;
+}
+
+.schrift {
+  font-size: 18px;
+  width: 250px;
+  border: 1px solid black;
+  padding: 10px;
+  margin: 25px;
+  float: left;
+}
+
+.flaeche {
+  background-image: linear-gradient(0deg, #f5deb3 5%, #6495ed 50%);
+}
