@@ -1,0 +1,15 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    line-height: 0.57;
+    font-size: 28px;
+    color: #999999;
+}
+
+.container {
+    width: 300px;
+    margin: 0 auto;
+}
+
+#status {
+    margin-top: 25px;
+}
